@@ -1,0 +1,53 @@
+// https://aka.ms/devcontainer.json
+{
+    "name": "LIVV Stack",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "laravel.test",
+    "workspaceFolder": "/var/www/html",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "editorconfig.editorconfig",
+                "ryannaddy.laravel-artisan",
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "stef-k.laravel-goto-controller",
+                "codingyu.laravel-goto-view",
+                "mikestead.dotenv",
+                "christian-kohler.path-intellisense",
+                "esbenp.prettier-vscode",
+                "CoenraadS.bracket-pair-colorizer"
+            ],
+            "settings": {}
+        }
+    },
+    "remoteUser": "sail",
+    "postCreateCommand": "cp .env.example .env && chown -R 1000:1000 /var/www/html && composer install && npm install && php artisan key:generate && echo \"ASSET_URL=https://${CODESPACE_NAME}-80.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}\" >> .env",
+    "postStartCommand": "php artisan migrate --seed",
+    "forwardPorts": [80, 5173, 3306, 8025],
+    "portsAttributes": {
+        "80": {
+            "label": "Inertia.js",
+            "description": "Inertia.js compiled assets"
+        },
+        "5173": {
+            "label": "Vite",
+            "description": "Laravel web app back end"
+        },
+        "3306": {
+            "label": "MySQL",
+            "description": "MySQL database"
+        },
+        "8025": {
+            "label": "Mailhog",
+            "description": "Mailhog SMTP server"
+        }
+    },
+    "runServices": [
+        "msql",
+        "redis",
+        "mailhog",
+        "laravel.test"
+    ]
+}
